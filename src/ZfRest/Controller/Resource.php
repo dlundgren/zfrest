@@ -44,6 +44,7 @@ abstract class Resource
 	                            \Zend_Controller_Response_Abstract $response,
 	                            array $invokeArgs = array())
 	{
+		parent::__construct($request, $response, $invokeArgs);
 		$this->response = new \stdClass();
 
 		if ($this->_helper->hasHelper('layout')) {
@@ -53,8 +54,6 @@ abstract class Resource
 		if ($this->_helper->hasHelper('viewRenderer')) {
 			$this->_helper->viewRenderer->setNoRender();
 		}
-
-		parent::__construct($request, $response, $invokeArgs);
 	}
 
 	/**

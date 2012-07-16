@@ -94,12 +94,13 @@ abstract class Oauth
 	}
 
 	/**
-	 * Implements Zend_Controller_Plugin_Abstract::preDispatch()
+	 * Handle OAuth before any dispatching is done
 	 *
+	 * @see    Zend_Controller_Plugin_Abstract::dispatchLoopStartup()
 	 * @param  Zend_Controller_Request_Abstract $request
 	 * @return void
 	 */
-	public function preDispatch(\Zend_Controller_Request_Abstract $request)
+	public function dispatchLoopStartup(\Zend_Controller_Request_Abstract $request)
 	{
 		if ($request->getModuleName() !== $this->_getModuleName()) {
 			return;
