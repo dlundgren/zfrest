@@ -17,16 +17,10 @@ abstract class Resource
 	extends \Zend_Controller_Action
 {
 	/**
-	 * Accept: application/xml
-	 * @var string
+	 * Replaces Zend_Controller_Action::view with a stdClass object
+	 * @var stdClass
 	 */
-	const FORMAT_XML = 'xml';
-
-	/**
-	 * Accept: application/json
-	 * @var string
-	 */
-	const FORMAT_JSON = 'json';
+	public $response;
 
 	/**
 	 * List of the allowed actions
@@ -42,33 +36,25 @@ abstract class Resource
 	);
 
 	/**
-	 * Initializes the defaults for the controllers.
+	 * Constructor
 	 *
-	 * This disables the viewRenderer and layout if available. as well as setting the content type
+	 * @see Zend_Controller_Action::__construct()
 	 */
-	public function init()
+	public function __construct(\Zend_Controller_Request_Abstract $request,
+	                            \Zend_Controller_Response_Abstract $response,
+	                            array $invokeArgs = array())
 	{
-		try {
-			$this->_helper->layout()->disableLayout();
-		}
-		catch (\Exception $e) {
-			// nothing to see here, move along
-		}
-		$this->_helper->viewRenderer->setNoRender();
+		$this->response = new \stdClass();
 
-		// check if the format has been set in the parameters
-		// XXX: the Accept header should overrides this
-		$format = strtolower($this->getRequest()->getParam('format', 'json'));
-		switch ($format) {
-			case self::FORMAT_XML:
-			case self::FORMAT_JSON;
-				break;
-			default:
-				throw new \RuntimeException('Invalid output format specified: ' . $format);
+		if ($this->_helper->hasHelper('layout')) {
+			$this->_helper->layout->disableLayout();
 		}
 
-		$this->getResponse()
-		     ->setHeader('Allow', strtoupper(implode(', ', $this->_allowedActions)));
+		if ($this->_helper->hasHelper('viewRenderer')) {
+			$this->_helper->viewRenderer->setNoRender();
+		}
+
+		parent::__construct($request, $response, $invokeArgs);
 	}
 
 	/**
@@ -98,6 +84,7 @@ abstract class Resource
 	{
 		$this->getResponse()
 		     ->clearHeader('Content-Type')
+		     ->setHeader('Allow', strtoupper(implode(', ', $this->_allowedActions)))
 		     ->setHttpResponseCode(200);
 	}
 
@@ -115,7 +102,7 @@ abstract class Resource
 	 */
 	protected function _sendNotAllowedResponse()
 	{
-		$this->getResponse()
-		     ->setHttpResponseCode(405);
+		$this->_sendOptionsResponse();
+		$this->getResponse()->setHttpResponseCode(405);
 	}
 }

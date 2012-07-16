@@ -301,24 +301,22 @@ class Route
 				break;
 			}
 			elseif (0 !== strpos($path, $pattern . self::URI_DELIMITER)) {
-				continue;
-			}
+				if (is_array($controller)) {
+					if (isset($controller['*'])) {
+						unset($controller['*']);
+					}
+					foreach($controller as $childPattern => $childController) {
+						if (false !== ($tempValues = $this->_processRoute($childPattern, str_replace($pattern. self::URI_DELIMITER, '', $checkPath)))) {
+							$values[$this->_controllerKey] = $childController;
+							$values                        = $values + $tempValues;
+							$matchedPath                   = $origPath;
+							break;
+						}
+					}
 
-			if (is_array($controller)) {
-				if (isset($controller['*'])) {
-					unset($controller['*']);
-				}
-				foreach($controller as $childPattern => $childController) {
-					if (false !== ($tempValues = $this->_processRoute($childPattern, str_replace($pattern. self::URI_DELIMITER, '', $checkPath)))) {
-						$values[$this->_controllerKey] = $childController;
-						$values                        = $values + $tempValues;
-						$matchedPath                   = $origPath;
+					if ($matchedPath) {
 						break;
 					}
-				}
-
-				if ($matchedPath) {
-					break;
 				}
 			}
 			elseif (false !== ($tempValues = $this->_processRoute($pattern, $checkPath))) {
