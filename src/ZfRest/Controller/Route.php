@@ -300,7 +300,7 @@ class Route
 				}
 				break;
 			}
-			elseif (0 !== strpos($path, $pattern . self::URI_DELIMITER)) {
+			elseif (0 === strpos($path, $pattern . self::URI_DELIMITER)) {
 				if (is_array($controller)) {
 					if (isset($controller['*'])) {
 						unset($controller['*']);
