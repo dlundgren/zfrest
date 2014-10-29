@@ -1,11 +1,11 @@
 <?php
 namespace ZfRest\Controller;
-/**
- * @license   MIT license
- * @copyright Copyright (c) 2012. David Lundgren, All Rights Reserved.
- * @version   1.0
- * @package   ZfRest
- */
+	/**
+	 * @license   MIT license
+	 * @copyright Copyright (c) 2012. David Lundgren, All Rights Reserved.
+	 * @version   1.0
+	 * @package   ZfRest
+	 */
 
 /**
  * The Route for the ZfRest library
@@ -68,8 +68,8 @@ class Route
 	 * @param Zend_Controller_Request_Abstract $request
 	 */
 	public function __construct(array $defaults = array(),
-	                            \Zend_Controller_Dispatcher_Interface $dispatcher = null,
-	                            \Zend_Controller_Request_Abstract $request = null)
+								\Zend_Controller_Dispatcher_Interface $dispatcher = null,
+								\Zend_Controller_Request_Abstract $request = null)
 	{
 		$this->setDefaults($defaults);
 
@@ -300,7 +300,7 @@ class Route
 				}
 				break;
 			}
-			elseif (0 === strpos($path, $pattern . self::URI_DELIMITER)) {
+			elseif (strpos($path, $pattern . self::URI_DELIMITER) === 0) {
 				if (is_array($controller)) {
 					if (isset($controller['*'])) {
 						unset($controller['*']);
@@ -356,7 +356,10 @@ class Route
 				return false;
 			}
 
-			if (':' === $part[0]) {
+			if (empty($part)) {
+				continue;
+			}
+			elseif (':' === $part[0]) {
 				$name  = substr($part, 1);
 				$regex = isset($this->_defaults['regex'][$part]) ? $this->_defaults['regex'][$part] : '.*';
 				if ( ! preg_match("/^{$regex}$/iu", $path[$pos])) {
