@@ -63,7 +63,8 @@ relies on being used on a per module basis.
 
 ### Bootstrap ###
 
-<pre><code><?php
+```php
+<?php
 class Apiv1_Bootstrap extends ZfRest_Application_Bootstrap
 {
 	public function _initRestRoutes()
@@ -86,12 +87,14 @@ class Apiv1_Bootstrap extends ZfRest_Application_Bootstrap
 			)
 		);
 	}
-}</code></pre>
+}
+```
 
 ## Controller ##
 
 Controllers are created like normal.
-<pre><code><?php
+```php
+<?php
 class UsersController extends ZfRest_Controller_Resource
 {
 	/**
@@ -109,7 +112,8 @@ class UsersController extends ZfRest_Controller_Resource
 	{
 		// create a user
 	}
-}</code></pre>
+}
+```
 
 The other controllers from the Example bootstrap woud be:
 
