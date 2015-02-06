@@ -1,11 +1,11 @@
 <?php
-namespace ZfRest\Controller;
 /**
  * @license   MIT license
- * @copyright Copyright (c) 2012. David Lundgren, All Rights Reserved.
+ * @copyright Copyright (c) 2012-2015. David Lundgren, All Rights Reserved.
  * @version   1.0
  * @package   ZfRest
  */
+namespace ZfRest\Controller;
 
 /**
  * Represent the Controller as a resource

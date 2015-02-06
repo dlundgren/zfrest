@@ -1,11 +1,11 @@
 <?php
+/**
+ * @license   MIT license
+ * @copyright Copyright (c) 2012-2015. David Lundgren, All Rights Reserved.
+ * @version   1.0
+ * @package   ZfRest
+ */
 namespace ZfRest\Controller;
-	/**
-	 * @license   MIT license
-	 * @copyright Copyright (c) 2012. David Lundgren, All Rights Reserved.
-	 * @version   1.0
-	 * @package   ZfRest
-	 */
 
 /**
  * The Route for the ZfRest library
