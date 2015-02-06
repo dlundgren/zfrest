@@ -64,20 +64,54 @@ relies on being used on a per module basis.
 ### Bootstrap ###
 
 ```php
-<?php
-class Apiv1_Bootstrap extends ZfRest_Application_Bootstrap
+/**
+ * Api version 1 bootstrap
+ */
+class Apiv1_Bootstrap extends \ZfRest\Application\Bootstrap
 {
-	public function _initRestRoutes()
+	public function _initRestRoutingPlugin()
 	{
-		$this->initZfRestRoutes('apiv1', 'api/v1');
+		$front = \Zend_Controller_Front::getInstance();
+		$front->registerPlugin(new Apiv1_Plugin_Routing($front->getDispatcher(), $front->getRouter());
+	}
+}
+
+/**
+ * API version 1 Routing plugin
+ */
+class Apiv1_Plugin_Routing extends \Zend_Controller_Plugin_Abstract
+{
+	private $dispatcher;
+	private $router;
+	
+	public function __construct(\Zend_Controller_Dispatcher_Interface $dispatcher, \Zend_Controller_Router_Rewrite $router)
+	{
+		$this->dispatcher = $dispatcher;
+		$this->router     = $router;
+	}
+	
+	public function routeStartup(\Zend_Controller_Request_Abstract $request)
+	{
+		$defaults = array(
+			'routeHandler' => array($this, 'fetchRoutes'),
+			'module'       => 'v1',
+			'routePrefix'  => 'v1'
+		);
+		$route = new \ZfRest\Controller\Route($default, $this->dispatcher, $request);
+		$route->setErrorRoute(array(
+			'module'     => 'v1',
+			'controller' => 'error',
+			'action'     => 'error'
+		));
+		$this->router->addRoute('api-v1', $route); 
 	}
 
 	public function fetchRoutes()
 	{
 		return array(
-			'users'            => 'Users',
-			'users/:id'        => 'User',
 			'users/:id/groups' => 'UserGroups'
+			'users/:id'        => 'User',
+			'users'            => 'Users',
 
 			// alternate syntax
 			'groups'           => array(
@@ -95,7 +129,7 @@ class Apiv1_Bootstrap extends ZfRest_Application_Bootstrap
 Controllers are created like normal.
 ```php
 <?php
-class UsersController extends ZfRest_Controller_Resource
+class Apiv1_Controller_UsersController extends \ZfRest\Controller\Resource
 {
 	/**
 	 * Handle the GET request
@@ -115,7 +149,7 @@ class UsersController extends ZfRest_Controller_Resource
 }
 ```
 
-The other controllers from the Example bootstrap woud be:
+The other controllers from the Example bootstrap would be:
 
 * UserController
 * UserGroupsController
