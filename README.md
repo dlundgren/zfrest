@@ -1,5 +1,7 @@
 # ZfRest #
 
+**⚠️ No longer maintained**
+
 ZfRest is a Zend Framework 1 extension. It is similar to Resauce but sufficiently different.
 
 ## Todo ##
